@@ -123,9 +123,9 @@ def funcion(row):
 
 
 if __name__ == "__main__":
-    df = pd.read_csv("multi_1.csv")
+    df = pd.read_csv("pruebaDatos.csv")
 
-    pool = multiprocessing.Pool(multiprocessing.cpu_count())
+    pool = multiprocessing.Pool(4)
     start_time = time.perf_counter()
     result = pool.map(funcion,df.to_numpy())
     pool.close()
@@ -133,7 +133,6 @@ if __name__ == "__main__":
     print(len(result))
     finish_time = time.perf_counter()
     print(f"Program finished in {finish_time-start_time} seconds")
-    print(result[-1])
 
     labels = []
     data = []
