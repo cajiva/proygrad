@@ -1,4 +1,3 @@
-from cProfile import label
 import pickle
 import multiprocessing
 import statistics
@@ -119,17 +118,14 @@ def funcion(row):
                     p = k
             n_faces[i][j],n_faces[i][p] = n_faces[i][p],n_faces[i][j] 
             emb[i][j], emb[i][p] = emb[i][p], emb[i][j]
-                
+    
     return (n_faces,row[1])
 
 
 if __name__ == "__main__":
-    lista = {"resources/aahncigwte.mp4","resources/adftmlvzfs.mp4",
-    "resources/agxplbynwg.mp4","resources/roilwdmonz.mp4","resources/tvwrowvqiy.mp4",
-    "resources/tjumanauqk.mp4","resources/svcfbpxpjp.mp4"}
-    df = pd.read_csv("pruebaDatos.csv")
+    df = pd.read_csv("multi_1.csv")
 
-    pool = multiprocessing.Pool(3)
+    pool = multiprocessing.Pool(multiprocessing.cpu_count())
     start_time = time.perf_counter()
     result = pool.map(funcion,df.to_numpy())
     pool.close()
@@ -137,25 +133,23 @@ if __name__ == "__main__":
     print(len(result))
     finish_time = time.perf_counter()
     print(f"Program finished in {finish_time-start_time} seconds")
-    print(result)
+    print(result[-1])
 
     labels = []
     data = []
 
     for i in result:
-        data.append(i[0])
-        labels.append(i[1])
+        if (len(i[0][0]) > 0):
+            data.append(i[0])
+            labels.append(i[1])
 
-    print(data)
-    print(labels)
-
-    file = open('labelsP','wb')
+    file = open('labelsM1','wb')
 
     pickle.dump(labels,file)
 
     file.close
 
-    file = open('dataP','wb')
+    file = open('dataM1','wb')
 
     pickle.dump(data,file)
 
